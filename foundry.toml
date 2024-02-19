@@ -2,7 +2,7 @@
 src = "src"
 out = "out"
 libs = ["lib"]
-remappings = ["forge-std/=lib/ds-test/src, @openzeppelin/=lib/openzeppelin-contracts, @balancer-labs/=lib/balancer-v2-monorepo, "]
+remappings = ["forge-std/=lib/ds-test/src, @openzeppelin/=lib/openzeppelin-contracts, @balancer-labs/=lib/balancer-v2-monorepo, balancer-v2-monorepo/=lib/balancer-v2-monorepo/"]
 
 [fmt]
 line_length = 100
