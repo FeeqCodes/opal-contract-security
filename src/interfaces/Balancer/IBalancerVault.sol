@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.20;
 
-import "balancer-v2-monorepo/pkg/interfaces/contracts/vault/IAsset.sol";
+import "balancer-labs/v2-interfaces/contracts/vault/IAsset.sol";
 
 interface IBalancerVault {
     enum PoolSpecialization {

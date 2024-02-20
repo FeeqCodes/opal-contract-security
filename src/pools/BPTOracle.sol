@@ -5,13 +5,13 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {IERC20Metadata} from "@openzeppelin/contracts/interfaces/IERC20Metadata.sol";
 import {IRateProvider} from
-    "balancer-v2-monorepo/pkg/interfaces/contracts/pool-utils/IRateProvider.sol";
+    "balancer-labs/v2-interfaces/contracts/pool-utils/IRateProvider.sol";
 import {IRateProviderPool} from
-    "balancer-v2-monorepo/pkg/interfaces/contracts/pool-utils/IRateProviderPool.sol";
+    "balancer-labs/v2-interfaces/contracts/pool-utils/IRateProviderPool.sol";
 import {IManagedPool} from
-    "balancer-v2-monorepo/pkg/interfaces/contracts/pool-utils/IManagedPool.sol";
+    "balancer-labs/v2-interfaces/contracts/pool-utils/IManagedPool.sol";
 import {IExternalWeightedMath} from
-    "balancer-v2-monorepo/pkg/interfaces/contracts/pool-weighted/IExternalWeightedMath.sol";
+    "balancer-labs/v2-interfaces/contracts/pool-weighted/IExternalWeightedMath.sol";
 import {IBalancerPool} from "src/interfaces/Balancer/IBalancerPool.sol";
 import {IBalancerVault} from "src/interfaces/Balancer/IBalancerVault.sol";
 import {IPriceFeed} from "src/interfaces/IPriceFeed.sol";

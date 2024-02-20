@@ -23,6 +23,8 @@ import {MockedLiquidityGauge} from "src/mocks/MockedLiquidityGauge.sol";
 import {ILiquidityGauge} from "src/interfaces/Gauge/ILiquidityGauge.sol";
 import {IGaugeController} from "src/interfaces/Gauge/IGaugeController.sol";
 
+
+
 contract MinterTest is Test {
     MockedERC20 public token;
     Minter public minter;
@@ -110,9 +112,9 @@ contract MinterGettersSettersTest is MinterTest {
 contract MinterUpdateMiningParametersTest is MinterTest {
     error CannotUpdate();
 
-    /**
-     * @notice  Should revert if block.timestamp < startEpochTime + RATE_REDUCTION_TIME
-     */
+//     /**
+//      * @notice  Should revert if block.timestamp < startEpochTime + RATE_REDUCTION_TIME
+    //  */
     function test_shouldRevertIfBlockTimestampIsLessThanStartEpochTimePlusRateReductionTime()
         external
     {
@@ -154,6 +156,8 @@ contract MinterUpdateMiningParametersTest is MinterTest {
         assertEq(minter.miningEpoch(), 1);
     }
 }
+
+
 
 contract MinterMintTest is MinterTest {
     error GaugeNotAdded();

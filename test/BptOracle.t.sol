@@ -10,13 +10,16 @@ import "./setup.t.sol";
 
 import "forge-std/console.sol";
 
-contract BPTOracleTest is SetupTest {
+contract BPTOracleTest  is SetupTest  {
     uint256 mainnetFork;
     BPTOracle public bptPrice;
+
+
 
     function setUp() public override {
         mainnetFork = vm.createFork("https://eth.llamarpc.com");
         vm.selectFork(mainnetFork);
+        
         super.setUp();
         console.log(address(registryContract));
         bptPrice = new BPTOracle(address(registryContract));

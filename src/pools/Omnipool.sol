@@ -76,6 +76,8 @@ contract Omnipool is IOmnipool {
     /// @notice Emitted when a new extra reward pool id is set
     event ExtraRewardPoolIdUpdated(address token, bytes32 poolId);
 
+    event result(uint value);
+
     /// @notice Map an X ERC20 token to a pool id that swap X for WETH
     mapping(address => bytes32) public extraRewardPools;
     IRewardPoolDepositWrapper public auraRewardPoolDepositWrapper;
@@ -123,6 +125,8 @@ contract Omnipool is IOmnipool {
     error PoolAlreadyShutdown();
     error NotSumToOne();
     error CantDepositAndWithdrawSameBlock();
+    error CantDepositFromContractAddress();
+
     error CannotSetRewardManagerTwice();
     error NullAddress();
 
@@ -181,6 +185,7 @@ contract Omnipool is IOmnipool {
         opalTreasury = registryContract.getContract(CONTRACT_OPAL_TREASURY);
 
         rewardPoolDepositWrapper = IRewardPoolDepositWrapper(_depositWrapper);
+
     }
 
     // --------------------------- PUBLIC FUNCTIONS ---------------------------
@@ -247,7 +252,16 @@ contract Omnipool is IOmnipool {
      * @param _depositFor The address of the user for whom to deposit
      * @param _minLpReceived The minimum amount of LP tokens to receive
      */
+
+    //  @audit: Check for zero address
+    //  @audit: L- two similar revert statements in same function, we need to save gas
+    // q: should this be made public? do we need to call this from outside since we have a seperate deposit function?
+    // i: the _depositFor parameter could be called maliciously and passed in a different address. meaning a user can deposit for other people. we should make it internal/private
     function depositFor(uint256 _amountIn, address _depositFor, uint256 _minLpReceived) public {
+        // if (_depositFor == address(0)) {
+        //     revert CantDepositFromContractAddress();
+        // }
+        
         if (lastTransactionBlock[_depositFor] == block.number) {
             revert CantDepositAndWithdrawSameBlock();
         }
@@ -256,6 +270,8 @@ contract Omnipool is IOmnipool {
             revert CantDepositAndWithdrawSameBlock();
         }
 
+        // this throws the exceptions
+        // @audit we shoukd get the address(0) check here
         uint256 underlyingPrice = bptOracle.getUSDPrice(address(underlyingToken));
 
         underlyingToken.forceApprove(address(auraRewardPoolDepositWrapper), _amountIn);
@@ -268,6 +284,7 @@ contract Omnipool is IOmnipool {
 
         uint256 exchangeRate = _exchangeRate(beforeTotalUnderlying);
 
+        // @auditL check for reentrancy. not following CEI principle
         // Transfer underlying token to this contract
         underlyingToken.safeTransferFrom(msg.sender, address(this), _amountIn);
 
@@ -293,6 +310,9 @@ contract Omnipool is IOmnipool {
             afterAllocatedPerPool
         );
         lastTransactionBlock[_depositFor] = block.number;
+
+        // emit
+        emit result(_amountIn);
     }
 
     // --------------------------- EXTERNAL FUNCTIONS ---------------------------
@@ -359,6 +379,7 @@ contract Omnipool is IOmnipool {
      * @notice Deposit underlying tokens for the caller
      * @param _amountIn The amount of underlying tokens to deposit
      */
+     
     function deposit(uint256 _amountIn, uint256 _minLpReceived) external {
         depositFor(_amountIn, msg.sender, _minLpReceived);
     }
@@ -1110,10 +1131,14 @@ contract Omnipool is IOmnipool {
      * @param   pool  The address of the pool.
      * @return  bool  return true if the pool is a Balancer pool
      */
+
+    //     @audit: possible denial of service
     function isBalancerPool(address pool) public view returns (bool) {
         uint256 len = uint8(underlyingPools.length);
         for (uint8 i = 0; i < len;) {
             if (underlyingPools[i].poolAddress == pool) {
+            //  console.log("This is the underlying", underlyingPools);
+
                 return true;
             }
             unchecked {

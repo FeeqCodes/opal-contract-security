@@ -14,8 +14,8 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-import "balancer-v2-monorepo/pkg/interfaces/contracts/solidity-utils/helpers/BalancerErrors.sol";
-import "balancer-v2-monorepo/pkg/interfaces/contracts/vault/IVault.sol";
+import "balancer-labs/v2-interfaces/contracts/solidity-utils/helpers/BalancerErrors.sol";
+import "balancer-labs/v2-interfaces/contracts/vault/IVault.sol";
 
 library VaultReentrancyLib {
     /**

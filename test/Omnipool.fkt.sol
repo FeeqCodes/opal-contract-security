@@ -13,9 +13,6 @@ import {stdStorage, StdStorage} from "forge-std/Test.sol";
 import {SetupTest} from "../test/setup.t.sol";
 import {GemMinterRebalancingReward} from "src/tokenomics/GemMinterRebalancingReward.sol";
 
-
-
-
 contract OmnipoolTest is SetupTest {
     uint256 mainnetFork;
     BPTOracle bptPrice;
